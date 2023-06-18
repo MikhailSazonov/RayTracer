@@ -88,4 +88,16 @@ namespace Math {
         }
         return std::nullopt;
     }
+
+    void Cone::MakeABox() {
+        box_.point_000_ = Point3D(-radius, -height, -radius);
+        box_.point_001_ = Point3D(radius, -height, -radius);
+        box_.point_010_ = Point3D(-radius, 0, -radius);
+        box_.point_100_ = Point3D(-radius, -height, radius);
+
+        box_.point_000_ *= transformer_.getOp();
+        box_.point_001_ *= transformer_.getOp();
+        box_.point_010_ *= transformer_.getOp();
+        box_.point_100_ *= transformer_.getOp();
+    }
 }

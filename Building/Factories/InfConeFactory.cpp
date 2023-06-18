@@ -1,19 +1,18 @@
-#include "CylinderFactory.hpp"
+#include "InfConeFactory.hpp"
 
-CylinderFactory::CylinderFactory(){};
+InfConeFactory::InfConeFactory(){};
 
-CylinderFactory::~CylinderFactory(){};
+InfConeFactory::~InfConeFactory(){};
 
-std::shared_ptr<Math::AFigure> CylinderFactory::createFigure(const libconfig::Setting &setting)
+std::shared_ptr<Math::AFigure> InfConeFactory::createFigure(const libconfig::Setting &setting)
 {
     int x, y, z;
-    double r, s, h;
+    double t, s;
 
     const libconfig::Setting &color = setting.lookup("color");
     const libconfig::Setting &center = setting.lookup("center");
 
-    setting.lookupValue("radius", r);
-    setting.lookupValue("height", h);
+    setting.lookupValue("tan", t);
     setting.lookupValue("specular", s);
 
     center.lookupValue("x", x);
@@ -29,8 +28,8 @@ std::shared_ptr<Math::AFigure> CylinderFactory::createFigure(const libconfig::Se
         color.lookupValue("b", b);
         size_t color_s = ((size_t)red << 16) | ((size_t)g << 8) | (size_t)b;
 
-        return std::make_shared<Math::Cylinder>(center_p, r, h, TransformerParser::getTransformer(setting), color_s, s);
+        return std::make_shared<Math::InfCone>(center_p, t, TransformerParser::getTransformer(setting), color_s, s);
     }
 
-    return std::make_shared<Math::Cylinder>(center_p, r, h);
+    return std::make_shared<Math::InfCone>(center_p, t);
 }

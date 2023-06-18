@@ -4,18 +4,12 @@
 
 FigureFactory::FigureFactory()
 {
-    this->factories_["spheres"] = new SphereFactory();
-    this->factories_["planes"] = new PlaneFactory();
-    this->factories_["cylinders"] = new CylinderFactory();
-    this->factories_["cones"] = new ConeFactory();
-}
-
-FigureFactory::~FigureFactory()
-{
-    for (const auto &factory : this->factories_)
-    {
-        delete factory.second;
-    }
+    this->factories_["spheres"] = std::make_unique<SphereFactory>();
+    this->factories_["planes"] = std::make_unique<PlaneFactory>();
+    this->factories_["cylinders"] = std::make_unique<CylinderFactory>();
+    this->factories_["cones"] = std::make_unique<ConeFactory>();
+    this->factories_["inf_cylinders"] = std::make_unique<InfCylinderFactory>();
+    this->factories_["inf_cones"] = std::make_unique<InfConeFactory>();
 }
 
 std::shared_ptr<Math::AFigure> FigureFactory::build(std::string factory, const libconfig::Setting& setting)

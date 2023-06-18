@@ -5,12 +5,12 @@
 #include <Math/Basics/Point3D.hpp>
 #include <Raytracing/Illumination/LightSources/AmbientIllumination.hpp>
 
-//! @brief The factory for the ambiant light
-class AmbiantLightFactory : public ISourceFactory
+//! @brief The factory for the ambient light
+class AmbientLightFactory : public ISourceFactory
 {
 public:
-    AmbiantLightFactory();
-    ~AmbiantLightFactory();
+    AmbientLightFactory();
+    ~AmbientLightFactory();
 
     std::unique_ptr<RayTracer::ISource> createSource(const libconfig::Setting &) override;
 };

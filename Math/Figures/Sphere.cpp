@@ -34,4 +34,16 @@ namespace Math {
         return IntersectParams(getNormalVector(intersectionPoint), intersectionPoint);
     }
 
+    void Sphere::MakeABox() {
+        box_.point_000_ = Point3D(center_ - radius_, center_ - radius_, center_ - radius_);
+        box_.point_001_ = Point3D(center_ + radius_, center_ - radius_, center_ - radius_);
+        box_.point_010_ = Point3D(center_ - radius_, center_ + radius_, center_ - radius_);
+        box_.point_100_ = Point3D(center_ - radius_, center_ - radius_, center_ + radius_);
+
+        box_.point_000_ *= transformer_.getOp();
+        box_.point_001_ *= transformer_.getOp();
+        box_.point_010_ *= transformer_.getOp();
+        box_.point_100_ *= transformer_.getOp();
+    }
+
 }

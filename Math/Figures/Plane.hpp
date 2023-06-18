@@ -2,7 +2,7 @@
 
 #include <Basics/Point3D.hpp>
 #include <Basics/Vector3D.hpp>
-#include <Figures/AFigure.hpp>
+#include <Figures/AInfiniteFigure.hpp>
 
 #include <Transformers/TranslationTransformer.hpp>
 #include <Transformers/BaseTransformer.hpp>
@@ -11,7 +11,7 @@
 
 namespace Math
 {
-    class Plane : public AFigure
+    class Plane : public AInfiniteFigure
     {
     public:
         Plane(const Point3D &, const Vector3D &, const Operators::ATransformer &transformer = Operators::BaseTransformer(),

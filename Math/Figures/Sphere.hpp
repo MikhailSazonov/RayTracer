@@ -1,13 +1,13 @@
 #pragma once
 
 #include <Basics/Point3D.hpp>
-#include <Figures/AFigure.hpp>
+#include <Figures/AFiniteFigure.hpp>
 
 #include <iostream>
 
 namespace Math
 {
-    class Sphere : public AFigure
+    class Sphere : public AFiniteFigure
     {
     public:
         Sphere(const Point3D &, double, const Operators::ATransformer &transformer = Operators::BaseTransformer(),
@@ -22,6 +22,8 @@ namespace Math
             // and don't waste resourses for extra checking
             return point_on_sphere - center_;
         }
+
+        void MakeABox() override;
 
     private:
         Point3D center_;

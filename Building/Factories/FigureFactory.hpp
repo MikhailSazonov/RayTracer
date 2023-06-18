@@ -7,16 +7,19 @@
 #include "PlaneFactory.hpp"
 #include "CylinderFactory.hpp"
 #include "ConeFactory.hpp"
+#include "InfCylinderFactory.hpp"
+#include "InfConeFactory.hpp"
+
+#include <memory>
 
 //! @brief The factory for the figures
 class FigureFactory
 {
 private:
-    std::unordered_map<std::string, IFigureFactory *> factories_;
+    std::unordered_map<std::string, std::unique_ptr<IFigureFactory>> factories_;
 
 public:
     FigureFactory();
-    ~FigureFactory();
 
     std::shared_ptr<Math::AFigure> build(std::string factory, const libconfig::Setting &setting);
 };
