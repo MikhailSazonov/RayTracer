@@ -34,4 +34,11 @@ namespace Math {
         return IntersectParams(getNormalVector(intersectionPoint), intersectionPoint);
     }
 
+    void MakeBox() override {
+        box_.basement_point_ = center_ - Vector3D(radius_, radius_, radius_);
+        box_.z_vect_ = {Vector3D(0, 0, radius_), Detail::Length::LIMITED} * transformer_.getOp();
+        box_.y_vect_ = {Vector3D(0, radius_, 0), Detail::Length::LIMITED} * transformer_.getOp();
+        box_.x_vect_ = {Vector3D(radius_, 0, 0), Detail::Length::LIMITED} * transformer_.getOp();
+    }
+
 }

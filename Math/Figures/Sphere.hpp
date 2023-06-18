@@ -23,6 +23,8 @@ namespace Math
             return point_on_sphere - center_;
         }
 
+        void MakeBox() override;
+
     private:
         Point3D center_;
         double radius_;

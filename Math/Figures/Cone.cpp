@@ -88,4 +88,18 @@ namespace Math {
         }
         return std::nullopt;
     }
+
+    void Cone::MakeBox() {
+        if (limited_) {
+            box_.basement_point_ = Point3D(-radius_, -height_, -radius_) * transformer_.getOp();
+            box_.z_vect_ = {Vector3D(0, 0, 2 * radius_), Detail::Length::LIMITED} * transformer_.getOp();
+            box_.y_vect_ = {Vector3D(0, height_, 0), Detail::Length::LIMITED} * transformer_.getOp();
+            box_.x_vect_ = {Vector3D(2 * radius_, 0, 0), Detail::Length::LIMITED} * transformer_.getOp();
+        } else {
+            box_.basement_point_ = Point3D(0, 0, 0);
+            box_.z_vect_ = {Vector3D(0, 0, 1), Detail::Length::UNLIMITED};
+            box_.y_vect_ = {Vector3D(0, 1, 0), Detail::Length::UNLIMITED};
+            box_.x_vect_ = {Vector3D(1, 0, 0), Detail::Length::UNLIMITED};
+        }
+    }
 }

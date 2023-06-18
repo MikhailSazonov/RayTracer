@@ -25,6 +25,8 @@ namespace Math
 
         std::optional<double> getQuadrFromRay(std::optional<double> &, const RayTracer::Ray &);
 
+        void MakeBox() override;
+
     private:
         double radius_;
         double height_{1.0};
