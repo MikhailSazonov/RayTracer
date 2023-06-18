@@ -8,11 +8,9 @@ namespace Math::Operators {
             {-sin(angle / 180 * M_PI),      cos(angle / 180 * M_PI),        0,          0},
             {0,                             0,                              1,          0},
             {0,                             0,                              0,          1},
-        }
+        }, {angle}
         )
-        {
-            setInvOperator({angle});
-        }
+        {}
 
     void RotationTransformerZ::setInvOperator(const std::vector<double>& args) {
         inv_operator_ = Matrix<4, 4>

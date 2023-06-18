@@ -8,7 +8,7 @@ namespace Math::Operators
     class ATransformer
     {
     protected:
-        ATransformer(const Matrix<4, 4> &);
+        ATransformer(const Matrix<4, 4> &, const std::vector<double> &);
 
         virtual void setInvOperator(const std::vector<double> &);
 

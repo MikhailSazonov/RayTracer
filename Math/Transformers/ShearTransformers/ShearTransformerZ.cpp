@@ -8,11 +8,9 @@ namespace Math::Operators {
             {0,             1,          0,          0},
             {x_shear,       y_shear,    1,          0},
             {0,             0,          0,          1},
-        }
+        }, {x_shear, y_shear}
         )
-        {
-            setInvOperator({x_shear, y_shear});
-        }
+        {}
 
     void ShearTransformerZ::setInvOperator(const std::vector<double>& args) {
         inv_operator_ = Matrix<4, 4>

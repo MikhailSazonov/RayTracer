@@ -8,11 +8,9 @@ namespace Math::Operators {
             {0,             1,              0,              y},
             {0,             0,              1,              z},
             {0,             0,              0,              1},
-        }
+        }, {x, y, z}
         )
-        {
-            setInvOperator({x, y, z});
-        }
+        {}
 
     void TranslationTransformer::setInvOperator(const std::vector<double>& args) {
         inv_operator_ = Matrix<4, 4>

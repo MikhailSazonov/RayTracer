@@ -10,11 +10,9 @@ namespace Math::Operators {
             {0,                 multiplicator_y,    0,                  0},
             {0,                 0,                  multiplicator_z,    0},
             {0,                 0,                  0,                  1},
-        }
+        }, {multiplicator_x, multiplicator_y, multiplicator_z}
         )
-        {
-            setInvOperator({multiplicator_x, multiplicator_y, multiplicator_z});
-        }
+        {}
 
     void ScalingTransformer::setInvOperator(const std::vector<double>& args) {
         inv_operator_ = Matrix<4, 4>
