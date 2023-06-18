@@ -17,7 +17,7 @@ namespace Math {
     struct PerfectVector3D {
         Vector3D direction_;
         Detail::Length limit_;
-    }
+    };
 
     struct Box {
         // point with minimum in every coordinate (x, y, z)

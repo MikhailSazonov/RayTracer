@@ -23,8 +23,7 @@ namespace Math
         void MakeBox() override;
 
     private:
-        Point3D point_;
-        Vector3D normal_;
+        inline static const Vector3D normal_{Vector3D(0, 1, 0)};
     };
 
 }

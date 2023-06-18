@@ -2,7 +2,7 @@
 
 Math::Operators::ATransformer::ATransformer(const Math::Operators::Matrix<4, 4>& op, const std::vector<double>& inv_args)
     : operator_(op) {
-        setInvOperator(inv_args)
+        setInvOperator(inv_args);
     }
 
 void Math::Operators::ATransformer::setInvOperator(const std::vector<double>&) {

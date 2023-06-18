@@ -91,10 +91,10 @@ namespace Math {
 
     void Cone::MakeBox() {
         if (limited_) {
-            box_.basement_point_ = Point3D(-radius_, -height_, -radius_) * transformer_.getOp();
-            box_.z_vect_ = {Vector3D(0, 0, 2 * radius_), Detail::Length::LIMITED} * transformer_.getOp();
-            box_.y_vect_ = {Vector3D(0, height_, 0), Detail::Length::LIMITED} * transformer_.getOp();
-            box_.x_vect_ = {Vector3D(2 * radius_, 0, 0), Detail::Length::LIMITED} * transformer_.getOp();
+            box_.basement_point_ = transformer_->getOp() * Point3D(-radius_, -height_, -radius_);
+            box_.z_vect_ = {transformer_->getOp() * Vector3D(0, 0, 2 * radius_), Detail::Length::LIMITED};
+            box_.y_vect_ = {transformer_->getOp() * Vector3D(0, height_, 0), Detail::Length::LIMITED};
+            box_.x_vect_ = {transformer_->getOp() * Vector3D(2 * radius_, 0, 0), Detail::Length::LIMITED};
         } else {
             box_.basement_point_ = Point3D(0, 0, 0);
             box_.z_vect_ = {Vector3D(0, 0, 1), Detail::Length::UNLIMITED};
