@@ -7,16 +7,15 @@
 #include "AmbientLight.hpp"
 #include "PointLightFactory.hpp"
 
-#include <memory>
-
 //! @brief The factory for the factories (main factory)
 class SourceFactory
 {
 private:
-    std::unordered_map<std::string, std::unique_ptr<ISourceFactory>> factories_;
+    std::unordered_map<std::string, ISourceFactory *> factories_;
 
 public:
     SourceFactory();
+    ~SourceFactory();
 
     /**
      * @brief Build a source from a factory and a setting

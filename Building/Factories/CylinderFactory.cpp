@@ -7,13 +7,18 @@ CylinderFactory::~CylinderFactory(){};
 std::shared_ptr<Math::AFigure> CylinderFactory::createFigure(const libconfig::Setting &setting)
 {
     int x, y, z;
-    double r, s, h;
+    double r, s;
+    std::optional<double> h(std::nullopt);
 
     const libconfig::Setting &color = setting.lookup("color");
     const libconfig::Setting &center = setting.lookup("center");
 
     setting.lookupValue("radius", r);
-    setting.lookupValue("height", h);
+    if (setting.exists("height")) {
+        double height;
+        setting.lookupValue("height", height);
+        h = height;
+    }
     setting.lookupValue("specular", s);
 
     center.lookupValue("x", x);

@@ -2,7 +2,7 @@
 
 #include <Basics/Point3D.hpp>
 #include <Basics/Vector3D.hpp>
-#include <Figures/AFiniteFigure.hpp>
+#include <Figures/AFigure.hpp>
 #include <Transformers/TranslationTransformer.hpp>
 #include <Transformers/BaseTransformer.hpp>
 #include <Solutions/Quadr.hpp>
@@ -11,7 +11,7 @@
 
 namespace Math
 {
-    class Cone : public AFiniteFigure
+    class Cone : public AFigure
     {
     public:
         Cone(const Point3D &, double, std::optional<double>, const Operators::ATransformer &transformer = Operators::BaseTransformer(),
@@ -24,8 +24,6 @@ namespace Math
                                  const RayTracer::Ray &);
 
         std::optional<double> getQuadrFromRay(std::optional<double> &, const RayTracer::Ray &);
-
-        void MakeABox() override;
 
     private:
         double radius_;

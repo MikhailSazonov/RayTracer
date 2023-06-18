@@ -7,14 +7,11 @@
 
 #include <memory>
 
-namespace Math {
-    class AFigure : public IFigure {
-
-    friend class FiniteFigure;
-    friend class InfiniteFigure;
-
-    // protected:
-    private:
+namespace Math
+{
+    class AFigure : public IFigure
+    {
+    protected:
         AFigure(size_t color, double specular_coef,
                 const Operators::ATransformer &transformer);
 

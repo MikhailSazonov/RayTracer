@@ -1,9 +1,14 @@
 #include "Cylinder.hpp"
 
 namespace Math {
-    Cylinder::Cylinder(const Point3D& center, double radius, double height, const Operators::ATransformer& transformer,
+    Cylinder::Cylinder(const Point3D& center, double radius, std::optional<double> height, const Operators::ATransformer& transformer,
     size_t color, double specular_coef)
-        : AFigure(color, specular_coef, transformer), radius_(radius), height_(height) {
+        : AFigure(color, specular_coef, transformer), radius_(radius) {
+            if (height.has_value()) {
+                height_ = *height;
+            } else {
+                limited_ = false;
+            }
             if (center != Point3D(0., 0., 0.)) {
                 *transformer_ *= Operators::TranslationTransformer(center.x_, center.y_, center.z_);
             }
@@ -58,15 +63,17 @@ namespace Math {
     std::optional<IntersectParams> Cylinder::innerNormalWithIntersection(const RayTracer::Ray& ray) {
         std::optional<double> min_k = std::nullopt;
         IntersectParams params;
-        // Check for bottom intersection
-        CheckPlaneIntersect(min_k, params, ray, -height_, -1);
-        // Check for upper intersection
-        CheckPlaneIntersect(min_k, params, ray, 0, 1);
+        if (limited_) {
+            // Check for bottom intersection
+            CheckPlaneIntersect(min_k, params, ray, -height_, -1);
+            // Check for upper intersection
+            CheckPlaneIntersect(min_k, params, ray, 0, 1);
+        }
         // Other intersections
         auto k_opt = getQuadrFromRay(min_k, ray);
         if (k_opt.has_value()) {
             auto y = ray.source_.y_ + ray.direction_.y_ * (*k_opt);
-            if (y < 0 && y > -height_) {
+            if (!limited_ || (y < 0 && y > -height_)) {
                 min_k = *k_opt;
                 auto at = ray.at(*k_opt);
                 params.intersection = at;
@@ -77,17 +84,5 @@ namespace Math {
             return params;
         }
         return std::nullopt;
-    }
-
-    void Cylinder::MakeABox() {
-        box_.point_000_ = Point3D(-radius, -height, -radius);
-        box_.point_001_ = Point3D(radius, -height, -radius);
-        box_.point_010_ = Point3D(-radius, 0, -radius);
-        box_.point_100_ = Point3D(-radius, -height, radius);
-
-        box_.point_000_ *= transformer_.getOp();
-        box_.point_001_ *= transformer_.getOp();
-        box_.point_010_ *= transformer_.getOp();
-        box_.point_100_ *= transformer_.getOp();
     }
 }

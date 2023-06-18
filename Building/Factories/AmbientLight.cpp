@@ -1,12 +1,14 @@
 #include "AmbientLight.hpp"
 
-AmbiantLightFactory::AmbientLightFactory()
-    {}
+AmbiantLightFactory::AmbiantLightFactory()
+{
+}
 
-AmbiantLightFactory::~AmbientLightFactory()
-    {}
+AmbiantLightFactory::~AmbiantLightFactory()
+{
+}
 
-std::unique_ptr<RayTracer::ISource> AmbientLightFactory::createSource(const libconfig::Setting &setting)
+std::unique_ptr<RayTracer::ISource> AmbiantLightFactory::createSource(const libconfig::Setting &setting)
 {
     const libconfig::Setting &color = setting.lookup("color");
     if (color.isAggregate()) {
