@@ -15,10 +15,13 @@ namespace RayTracer
         double specular_coef;
     };
 
+    using Objects = std::vector<std::shared_ptr<Math::AFigure>>;
+    using Sources = std::vector<std::shared_ptr<ISource>>;
+
     // Returns the color of pixel,
     // based on the scene
     // Summarizes the light from all the light sources
-    Math::Vector3D RayTrace(const Scene &, Ray &);
+    Math::Vector3D RayTrace(const Objects &, const Sources &, Ray &);
 
     std::optional<RenderingObjectParameters> findClosestObject(const Ray &, const std::vector<std::shared_ptr<Math::AFigure>> &);
 

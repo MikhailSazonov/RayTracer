@@ -7,6 +7,7 @@ SRC = main.cpp CmdLineParser.cpp Math/Basics/*.cpp Math/Figures/*.cpp \
 		Building/Camera/*.cpp Raytracing/FileUtils/*.cpp \
 		Raytracing/Slicer/Slicer.cpp \
 		Raytracing/RayTrace.cpp \
+		Storage/SimpleStorage.cpp \
 		ThreadPool/ThreadPool.cpp \
 		Building/ConfigBuilder/*.cpp Building/Factories/*.cpp \
 		Building/TransformerParser/TransformerParser.cpp \
@@ -16,7 +17,7 @@ NAME = raytracer
 OBJ = $(SRC:.cpp=.o)
 
 CPPFLAGS = -std=c++20 -Wall -Wextra -Werror -lpthread -pthread -I./Math/ -I./ \
-			-I./Building/ -I./Raytracing -lconfig++
+			-I./Building/ -I./Raytracing -I./Storage -lconfig++
 
 $(NAME): $(SRC)
 	g++ $(CPPFLAGS) $(SRC) -o $(NAME)

@@ -62,9 +62,9 @@ const std::vector<std::shared_ptr<Math::AFigure>>& objects) {
     return closest_object_params;
 }
 
-Math::Vector3D RayTracer::RayTrace(const RayTracer::Scene& scene, RayTracer::Ray& ray) {
+Math::Vector3D RayTracer::RayTrace(const RayTracer::Objects& objects, const RayTracer::Sources &lights, RayTracer::Ray& ray) {
     // flag for the reflection:
-    auto obj_params = findClosestObject(ray, scene.objects_);
+    auto obj_params = findClosestObject(ray, objects);
     if (!obj_params.has_value()) {
         // sky is over
         // TODO: put in enum
@@ -73,10 +73,10 @@ Math::Vector3D RayTracer::RayTrace(const RayTracer::Scene& scene, RayTracer::Ray
     // Here the ray was reflected
     ray.ReflectInPlace(obj_params->params.intersection, obj_params->params.normal);
     Math::Vector3D color;
-    for (auto& lights : scene.lights_) {
+    for (auto& lights : lights) {
         std::optional<Math::Vector3D> next_color;
         if ((next_color = lights->getColor(ray, obj_params->params.normal,
-        obj_params->specular_coef, scene.objects_)) != std::nullopt) {
+        obj_params->specular_coef, objects)) != std::nullopt) {
             color += *next_color;
         }
     }
