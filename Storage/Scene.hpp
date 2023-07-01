@@ -8,10 +8,13 @@
 
 namespace RayTracer
 {
+    using Objects = std::vector<std::shared_ptr<Math::AFigure>>;
+    using Sources = std::vector<std::shared_ptr<ISource>>;
+
     struct Scene
     {
-        std::vector<std::shared_ptr<Math::AFigure>> objects_;
-        std::vector<std::shared_ptr<ISource>> lights_;
+        Objects objects_;
+        Sources lights_;
     };
 
 }

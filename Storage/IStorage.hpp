@@ -7,11 +7,15 @@
 namespace Storage {
     class IStorage {
         public:
-            // force to implement a constructor with const Raytracer::Scene&
+            // Force to implement a constructor with const Raytracer::Scene&
             IStorage(const RayTracer::Scene&) {}
 
             virtual ~IStorage() = default;
 
-            virtual Math::Vector3D ProcessRay(RayTracer::Ray&) const = 0;
+            // Get objects that the ray could collide with
+            virtual const RayTracer::Objects& possibleIntersected(const RayTracer::Ray&) const = 0;
+
+            // Get light sources that could affect the pixel
+            virtual const RayTracer::Sources& possibleIlluminated(const RayTracer::Ray&) const = 0;
     };
 }

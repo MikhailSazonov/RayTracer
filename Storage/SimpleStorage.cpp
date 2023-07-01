@@ -3,6 +3,10 @@
 Storage::SimpleStorage::SimpleStorage(const RayTracer::Scene& scene)
     : IStorage(scene), scene_(scene) {}
 
-Math::Vector3D Storage::SimpleStorage::ProcessRay(RayTracer::Ray& ray) const {
-    return RayTrace(scene_.objects_, scene_.lights_, ray);
+const RayTracer::Objects& Storage::SimpleStorage::possibleIntersected(const RayTracer::Ray&) const {
+    return scene_.objects_;
+}
+
+const RayTracer::Sources& Storage::SimpleStorage::possibleIlluminated(const RayTracer::Ray&) const {
+    return scene_.lights_;
 }

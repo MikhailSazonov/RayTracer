@@ -33,7 +33,7 @@ void CalcPixel(size_t i, size_t j, size_t width, size_t height, Files::PPMManage
 
     if (Settings::isFast()) {
         RayTracer::Ray r = cam.ray(u, v);
-        writer[j][i] = RayTracer::convertToRGB(storage.ProcessRay(r));
+        writer[j][i] = RayTracer::convertToRGB(RayTracer::RayTrace(storage, r));
     } else {
         static const double dv[] = {1.0 / (4.0 * (double)width), 1.0 / (4.0 * (double)width), -1.0 / (4.0 * (double)width), -1.0 / (4.0 * (double)width)};
         static const double du[] = {1.0 / (4.0 * (double)height), -1.0 / (4.0 * (double)height), -1.0 / (4.0 * (double)height), 1.0 / (4.0 * (double)height)};
@@ -41,7 +41,7 @@ void CalcPixel(size_t i, size_t j, size_t width, size_t height, Files::PPMManage
         Math::Vector3D res;
         for (int k = 0; k < 4; ++k) {
             RayTracer::Ray r = cam.ray(std::clamp(u + du[k], 0., 1.), std::clamp(v + dv[k], 0., 1.));
-            res += storage.ProcessRay(r);
+            res += RayTracer::RayTrace(storage, r);
         }
         writer[j][i] = RayTracer::convertToRGB(res / 4.0);
     }
