@@ -16,9 +16,6 @@ namespace RayTracer
         double specular_coef;
     };
 
-    using Objects = std::vector<std::shared_ptr<Math::AFigure>>;
-    using Sources = std::vector<std::shared_ptr<ISource>>;
-
     // Returns the color of pixel,
     // based on the scene
     // Summarizes the light from all the light sources
