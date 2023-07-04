@@ -6,6 +6,7 @@ Storage::KDFTree::KDFTree(const RayTracer::Scene& scene)
     :
         sources_(scene.lights_)
 {
+    gen.seed(std::time(nullptr));
     InitHead(scene);
     CreateChildren(head);
 }
@@ -35,12 +36,6 @@ size_t dividing_axis_index, size_t recursion_depth) {
         }
     }
 
-    if (left_set.empty() || right_set.empty()) {
-        // One of the children is empty: we pick next axis for the same node
-        CreateChildren(node, (dividing_axis_index + 1) % order_of_cutting.size(), recursion_depth + 1);
-        return;
-    }
-
     for (auto& obj_ptr : left_set) {
         node->objects_.erase(obj_ptr);
     }
@@ -59,5 +54,76 @@ size_t dividing_axis_index, size_t recursion_depth) {
         node->right_son_->objects_ = right_set;
         CreateChildren(node->right_son_, (dividing_axis_index + 1) % order_of_cutting.size(), recursion_depth + 1);
     }
+}
 
+void Storage::KDFTree::InitHead(const RayTracer::Scene& scene) {
+    head_.reset(new KDFTreeNode());
+    for (auto& obj_unique_ptr : scene.objects_) {
+        head_->objects_.insert(&obj_unique_ptr);
+    }
+}
+
+double Storage::KDFTree::PickDividingValue(const RayTracer::ObjectsPtrs& obj_refs, Detail::CuttingAxis dividing_axis) {
+    size_t idx = gen() % obj_refs.size();
+    switch dividing_axis {
+        case X:
+            return obj_refs[idx].getBox().basement_point_.x_ - 1e9;
+        case Y:
+            return obj_refs[idx].getBox().basement_point_.y_ - 1e9;
+        case Z:
+            return obj_refs[idx].getBox().basement_point_.z_ - 1e9;
+    }
+    return 0;
+}
+
+Detail::NodeBelonging Storage::KDFTree::DetermineBelonging(const Math::AFigure& figure, Detail::CuttingAxis dividing_axis, double dividing_value) {
+    auto& box = figure.getBox();
+    if (dividing_axis == Detail::CuttingAxis::X && box.x_vect_.limit_ == Math::Detail::Length::UNLIMITED || 
+            dividing_axis == Detail::CuttingAxis::Y && box.y_vect_.limit_ == Math::Detail::Length::UNLIMITED || 
+                dividing_axis == Detail::CuttingAxis::Z && box.z_vect_.limit_ == Math::Detail::Length::UNLIMITED)
+    {
+        return Detail::NodeBelonging::BOTH;
+    }
+    Math::Point3D p[8];
+    p[0] = box.basement_point_;
+    p[1] = box.basement_point_ + box.x_vect_;
+    p[2] = box.basement_point_ + box.y_vect_;
+    p[3] = box.basement_point_ + box.x_vect_ + box.y_vect_;
+    p[4] = box.basement_point_ + box.z_vect_;
+    p[5] = box.basement_point_ + box.z_vect_ + box.x_vect_;
+    p[6] = box.basement_point_ + box.z_vect_ + box.y_vect_;
+    p[7] = box.basement_point_ + box.z_vect_ + box.y_vect + box.x_vect_;
+    switch (dividing_axis) {
+        case Detail::CuttingAxis::X {
+            return CompareThePoints(p, 0, dividing_value);
+        }
+        case Detail::CuttingAxis::Y {
+            return CompareThePoints(p, 1, dividing_value);
+        }
+        case Detail::CuttingAxis::Z {
+            return CompareThePoints(p, 2, dividing_value);
+        }
+    }
+}
+
+Detail::NodeBelonging Storage::KDFTree::CompareThePoints(Math::Point3D* points, int index, double dividing_value) {
+    bool left = true;
+    bool right = true;
+    for (int i = 0; i < 8; ++i) {
+        if (points[i][index] < dividing_value) {
+            right = false;
+        }
+        if (points[i][index] >= dividing_value) {
+            left = false;
+        }
+    }
+    if (left ^ right) {
+        if (left) {
+            return Detail::NodeBelonging::LEFT
+        }
+        if (right) {
+            return Detail::NodeBelonging::RIGHT;
+        }
+    }
+    return Detail::NodeBelonging::BOTH;
 }

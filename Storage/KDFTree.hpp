@@ -2,6 +2,9 @@
 
 #include "KDFTreeUtils.hpp"
 
+#include <random>
+#include <ctime>
+
 namespace Storage {
     // KD Tree for storing the objects.
     // The differences from classic KD Tree:
@@ -11,7 +14,7 @@ namespace Storage {
     // their nodes are spliited recursively, but now with Y axis, etc. After Z axis we start
     // from the beginning (X in that case)
     // The order of choosing the cutting axis seems not to have effect,
-    // anyawy it is defined it KDFTreeUtils.hpp
+    // anyway it is defined it KDFTreeUtils.hpp
     // Number of nodes and complexity remains the same, but it is easier to write and
     // understand the code.
     //
@@ -38,8 +41,11 @@ namespace Storage {
             // BOTH if none of those
             Detail::NodeBelonging DetermineBelonging(const Math::AFigure& figure, Detail::CuttingAxis dividing_axis, double dividing_value);
 
+            Detail::NodeBelonging CompareThePoints(Math::Point3D* points, int index, double dividing_value);
+
         private:
             std::unique_ptr<Detail::KDFTreeNode> head_;
             const RayTracer::Sources& sources_;
+            std::mt19937 gen;
     };
 }
