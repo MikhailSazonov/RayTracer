@@ -25,12 +25,9 @@ namespace Storage {
         public:
             KDFTree(const RayTracer::Scene& scene);
 
-            const RayTracer::Objects& possibleIntersected(const RayTracer::Ray&) const;
-
-            /// TODO: also put the illuminations in struct?
-            const RayTracer::Sources& possibleIlluminated(const RayTracer::Ray&) const;
-
         private:
+            // BUILDING
+
             void InitHead(const RayTracer::Scene& scene);
 
             void CreateChildren(std::unique_ptr<Detail::KDFTreeNode>& node, size_t dividing_axis_index = 0, size_t recursion_depth = 0);
@@ -42,6 +39,9 @@ namespace Storage {
             Detail::NodeBelonging DetermineBelonging(const Math::AFigure& figure, Detail::CuttingAxis dividing_axis, double dividing_value);
 
             Detail::NodeBelonging CompareThePoints(Math::Point3D* points, int index, double dividing_value);
+
+
+            // WORKING WITH RAYS
 
         private:
             std::unique_ptr<Detail::KDFTreeNode> head_;

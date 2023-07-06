@@ -3,11 +3,11 @@
 namespace RayTracer {
 
 bool DirectIllumination::isShadowed(const Ray& ray,
-const std::vector<std::shared_ptr<Math::AFigure>>& objects) {
+const Storage::IStorage& storage) {
     if (Settings::isFast()) {
         return false;
     }
-    return findClosestObject(ray, objects).has_value();
+    return storage.lookupIntersection(ray).has_value();
 }
 
 DirectIllumination::DirectIllumination(const Math::Vector3D& direction, const Math::Vector3D& color,
@@ -18,12 +18,12 @@ DirectIllumination::DirectIllumination(const Math::Vector3D& direction, const Ma
     }
 
 std::optional<Math::Vector3D> DirectIllumination::getColor(const Ray& ray, const Math::Vector3D& normal, double surface_receptivity,
-                                                            const std::vector<std::shared_ptr<Math::AFigure>>& figures) {
+                                                            const Storage::IStorage& storage) {
     double cosin_spec = Math::cos(ray.direction_, direction_);
     double cosin_diffuse = Math::cos(normal, direction_);
     // 1. The direction of ray is bad
     // 2. Shadows
-    if ((cosin_spec <= 0 && cosin_diffuse <= 0) || isShadowed(Ray(ray.source_, direction_), figures)) {
+    if ((cosin_spec <= 0 && cosin_diffuse <= 0) || isShadowed(Ray(ray.source_, direction_), storage)) {
         return std::nullopt;
     }
     Math::Vector3D result;

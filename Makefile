@@ -8,6 +8,7 @@ SRC = main.cpp CmdLineParser.cpp Math/Basics/*.cpp Math/Figures/*.cpp \
 		Raytracing/Slicer/Slicer.cpp \
 		Raytracing/RayTrace.cpp \
 		Storage/SimpleStorage.cpp \
+		Storage/Lookup.cpp \
 		ThreadPool/ThreadPool.cpp \
 		Building/ConfigBuilder/*.cpp Building/Factories/*.cpp \
 		Building/TransformerParser/TransformerParser.cpp \

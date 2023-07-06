@@ -19,10 +19,10 @@ namespace RayTracer
                            double diffuse_coef = 1., double specular_coef = 1.);
 
         std::optional<Math::Vector3D> getColor(const Ray &, const Math::Vector3D &, double,
-                                               const std::vector<std::shared_ptr<Math::AFigure>> &);
+                                               const Storage::IStorage&);
 
         bool isShadowed(const Ray&,
-        const std::vector<std::shared_ptr<Math::AFigure>>&);
+        const Storage::IStorage&);
 
     private:
         Math::Vector3D direction_;

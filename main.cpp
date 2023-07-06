@@ -27,13 +27,14 @@
 
 #include <iostream>
 
-void CalcPixel(size_t i, size_t j, size_t width, size_t height, Files::PPMManager& writer, const RayTracer::Camera& cam, const Storage::Storage& storage) {
+void CalcPixel(size_t i, size_t j, size_t width, size_t height, Files::PPMManager& writer, const RayTracer::Camera& cam, const Storage::Storage& storage, 
+const RayTracer::Sources& sources) {
     double v = i / (double)width;
     double u = j / (double)height;
 
     if (Settings::isFast()) {
         RayTracer::Ray r = cam.ray(u, v);
-        writer[j][i] = RayTracer::convertToRGB(RayTracer::RayTrace(storage, r));
+        writer[j][i] = RayTracer::convertToRGB(RayTracer::RayTrace(storage, sources, r));
     } else {
         static const double dv[] = {1.0 / (4.0 * (double)width), 1.0 / (4.0 * (double)width), -1.0 / (4.0 * (double)width), -1.0 / (4.0 * (double)width)};
         static const double du[] = {1.0 / (4.0 * (double)height), -1.0 / (4.0 * (double)height), -1.0 / (4.0 * (double)height), 1.0 / (4.0 * (double)height)};
@@ -41,7 +42,7 @@ void CalcPixel(size_t i, size_t j, size_t width, size_t height, Files::PPMManage
         Math::Vector3D res;
         for (int k = 0; k < 4; ++k) {
             RayTracer::Ray r = cam.ray(std::clamp(u + du[k], 0., 1.), std::clamp(v + dv[k], 0., 1.));
-            res += RayTracer::RayTrace(storage, r);
+            res += RayTracer::RayTrace(storage, sources, r);
         }
         writer[j][i] = RayTracer::convertToRGB(res / 4.0);
     }
@@ -75,7 +76,7 @@ int main(int argc, char **argv) {
             tp.Submit([&, i, j]() mutable {
                 for (size_t k = 0; k < x_; ++k) {
                     for (size_t t = 0; t < y_; ++t) {
-                        CalcPixel(i * x_ + k, j * y_ + t, cam->getWidth(), cam->getHeight(), writer, *cam, storage);
+                        CalcPixel(i * x_ + k, j * y_ + t, cam->getWidth(), cam->getHeight(), writer, *cam, storage, scene.lights_);
                     }
                 }
             });

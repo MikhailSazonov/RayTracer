@@ -39,32 +39,9 @@ const std::vector<std::shared_ptr<Math::AFigure>>& objects) {
     return false;
 }
 
-std::optional<RayTracer::RenderingObjectParameters> RayTracer::findClosestObject(const Ray& ray,
-const std::vector<std::shared_ptr<Math::AFigure>>& objects) {
-    double min_distance = std::numeric_limits<double>::infinity();
-    std::optional<RayTracer::RenderingObjectParameters> closest_object_params = std::nullopt;
-    // Scanning for the object that we could collide with.
-    // The closest object wins
-    for (auto& object : objects) {
-        // if the ray was reflected, and we meet another object, put shadow
-        // or if the ray was reflected and there are no light sources on the way
-        auto intersect_params = object->normalWithIntersection(ray);
-        if (intersect_params != std::nullopt) {
-            double distance = (intersect_params->intersection - ray.source_).length();
-            if (distance < min_distance && distance > 1e-9) {
-                min_distance = distance;
-                closest_object_params = {*intersect_params,
-                                        object->getColorReaction(),
-                                        object->getSpecularCoef()};
-            }
-        }
-    }
-    return closest_object_params;
-}
-
-Math::Vector3D RayTracer::RayTrace(const Storage::Storage& storage, RayTracer::Ray& ray) {
+Math::Vector3D RayTracer::RayTrace(const Storage::Storage& storage, const RayTracer::Sources& sources, RayTracer::Ray& ray) {
     // flag for the reflection:
-    auto obj_params = findClosestObject(ray, storage.possibleIntersected(ray));
+    auto obj_params = storage.lookupIntersection(ray);
     if (!obj_params.has_value()) {
         // sky is over
         // TODO: put in enum
@@ -73,10 +50,10 @@ Math::Vector3D RayTracer::RayTrace(const Storage::Storage& storage, RayTracer::R
     // Here the ray was reflected
     ray.ReflectInPlace(obj_params->params.intersection, obj_params->params.normal);
     Math::Vector3D color;
-    for (auto& lights : storage.possibleIlluminated(ray)) {
+    for (auto& lights : sources) {
         std::optional<Math::Vector3D> next_color;
         if ((next_color = lights->getColor(ray, obj_params->params.normal,
-        obj_params->specular_coef, storage.possibleIntersected(ray))) != std::nullopt) {
+        obj_params->specular_coef, storage)) != std::nullopt) {
             color += *next_color;
         }
     }

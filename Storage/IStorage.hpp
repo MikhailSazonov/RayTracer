@@ -1,21 +1,17 @@
 #pragma once
 
-#include "Scene.hpp"
 #include <Basics/Vector3D.hpp>
 #include <Illumination/Ray.hpp>
+#include <RenderingParams.hpp>
+
+#include <optional>
 
 namespace Storage {
     class IStorage {
         public:
-            // Force to implement a constructor with const Raytracer::Scene&
-            IStorage(const RayTracer::Scene&) {}
-
             virtual ~IStorage() = default;
 
-            // Get objects that the ray could collide with
-            virtual const RayTracer::Objects& possibleIntersected(const RayTracer::Ray&) const = 0;
-
-            // Get light sources that could affect the pixel
-            virtual const RayTracer::Sources& possibleIlluminated(const RayTracer::Ray&) const = 0;
+            // Get params of the surface that ray is colliding with
+            virtual std::optional<RayTracer::RenderingObjectParameters> lookupIntersection(const RayTracer::Ray&) const = 0;
     };
 }

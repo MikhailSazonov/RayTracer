@@ -67,11 +67,11 @@ double Storage::KDFTree::PickDividingValue(const RayTracer::ObjectsPtrs& obj_ref
     size_t idx = gen() % obj_refs.size();
     switch dividing_axis {
         case X:
-            return obj_refs[idx].getBox().basement_point_.x_ - 1e9;
+            return obj_refs[idx].getBox().basement_point_.x_ - 1e5;
         case Y:
-            return obj_refs[idx].getBox().basement_point_.y_ - 1e9;
+            return obj_refs[idx].getBox().basement_point_.y_ - 1e5;
         case Z:
-            return obj_refs[idx].getBox().basement_point_.z_ - 1e9;
+            return obj_refs[idx].getBox().basement_point_.z_ - 1e5;
     }
     return 0;
 }
@@ -93,17 +93,7 @@ Detail::NodeBelonging Storage::KDFTree::DetermineBelonging(const Math::AFigure& 
     p[5] = box.basement_point_ + box.z_vect_ + box.x_vect_;
     p[6] = box.basement_point_ + box.z_vect_ + box.y_vect_;
     p[7] = box.basement_point_ + box.z_vect_ + box.y_vect + box.x_vect_;
-    switch (dividing_axis) {
-        case Detail::CuttingAxis::X {
-            return CompareThePoints(p, 0, dividing_value);
-        }
-        case Detail::CuttingAxis::Y {
-            return CompareThePoints(p, 1, dividing_value);
-        }
-        case Detail::CuttingAxis::Z {
-            return CompareThePoints(p, 2, dividing_value);
-        }
-    }
+    return CompareThePoints(p, static_cast<int>(dividing_axis), dividing_value);
 }
 
 Detail::NodeBelonging Storage::KDFTree::CompareThePoints(Math::Point3D* points, int index, double dividing_value) {

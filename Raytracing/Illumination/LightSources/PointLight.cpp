@@ -12,11 +12,11 @@ namespace RayTracer
     {}
 
     bool PointLight::isShadowed(const Ray& ray,
-    const std::vector<std::shared_ptr<Math::AFigure>>& objects) {
+    const Storage::IStorage& storage) {
         if (Settings::isFast()) {
             return false;
         }
-        auto intersect_params = findClosestObject(ray, objects);
+        auto intersect_params = storage.lookupIntersection(ray);
         if (!intersect_params.has_value()) {
             return false;
         }
@@ -26,7 +26,7 @@ namespace RayTracer
     }
 
     std::optional<Math::Vector3D> PointLight::getColor(const Ray &ray, const Math::Vector3D &normal, double surface_receptivity,
-                                                       const std::vector<std::shared_ptr<Math::AFigure>> &figures)
+                                                       const Storage::IStorage& storage)
     {
         Math::Vector3D light_direction = position_ - ray.source_;
 
@@ -35,7 +35,7 @@ namespace RayTracer
 
         // 1. The direction of ray is bad
         // 2. Shadows
-        if ((cosin_spec <= 0 && cosin_diffuse <= 0) || isShadowed(Ray(ray.source_, light_direction), figures)) {
+        if ((cosin_spec <= 0 && cosin_diffuse <= 0) || isShadowed(Ray(ray.source_, light_direction), storage)) {
             return std::nullopt;
         }
 

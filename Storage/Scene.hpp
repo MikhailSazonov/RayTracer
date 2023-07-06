@@ -12,8 +12,8 @@ namespace RayTracer
     using Objects = std::vector<std::shared_ptr<Math::AFigure>>;
     using Sources = std::vector<std::shared_ptr<ISource>>;
 
-    using ObjectsPtrs = std::unordered_set<std::shared_ptr<Math::AFigure>*>;
-    using SourcesPtrs = std::unordered_set<std::shared_ptr<ISource>*>;
+    using ObjectsPtrs = std::unordered_set<const std::shared_ptr<Math::AFigure>*>;
+    using SourcesPtrs = std::unordered_set<const std::shared_ptr<ISource>*>;
 
     struct Scene
     {

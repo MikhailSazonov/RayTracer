@@ -1,12 +1,11 @@
 #include <SimpleStorage.hpp>
 
-Storage::SimpleStorage::SimpleStorage(const RayTracer::Scene& scene)
-    : IStorage(scene), scene_(scene) {}
-
-const RayTracer::Objects& Storage::SimpleStorage::possibleIntersected(const RayTracer::Ray&) const {
-    return scene_.objects_;
+Storage::SimpleStorage::SimpleStorage(const RayTracer::Scene& scene) {
+    for (auto& obj : scene.objects_) {
+        objs_ptrs.insert(&obj);
+    }
 }
 
-const RayTracer::Sources& Storage::SimpleStorage::possibleIlluminated(const RayTracer::Ray&) const {
-    return scene_.lights_;
+std::optional<RayTracer::RenderingObjectParameters> Storage::SimpleStorage::lookupIntersection(const RayTracer::Ray& ray) const {
+    return findClosestObject(ray, objs_ptrs);
 }

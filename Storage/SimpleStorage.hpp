@@ -1,17 +1,15 @@
 #pragma once
 
 #include <IStorage.hpp>
+#include <Lookup.hpp>
 
 namespace Storage {
     class SimpleStorage : public IStorage {
         public:
             SimpleStorage(const RayTracer::Scene&);
 
-            const RayTracer::Objects& possibleIntersected(const RayTracer::Ray&) const;
-
-            const RayTracer::Sources& possibleIlluminated(const RayTracer::Ray&) const;
-
+            std::optional<RayTracer::RenderingObjectParameters> lookupIntersection(const RayTracer::Ray&) const;
         private:
-            const RayTracer::Scene& scene_;
+            RayTracer::ObjectsPtrs objs_ptrs;
     };
 }
