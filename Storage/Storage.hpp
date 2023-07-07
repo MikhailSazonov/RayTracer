@@ -4,5 +4,5 @@
 #include <KDFTree.hpp>
 
 namespace Storage {
-    using Storage = SimpleStorage;
+    using Storage = KDFTree;
 }

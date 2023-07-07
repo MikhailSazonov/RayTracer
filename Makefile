@@ -8,6 +8,8 @@ SRC = main.cpp CmdLineParser.cpp Math/Basics/*.cpp Math/Figures/*.cpp \
 		Raytracing/Slicer/Slicer.cpp \
 		Raytracing/RayTrace.cpp \
 		Storage/SimpleStorage.cpp \
+		Storage/KDFTreeBuilding.cpp \
+		Storage/KDFTreeTracing.cpp \
 		Storage/Lookup.cpp \
 		ThreadPool/ThreadPool.cpp \
 		Building/ConfigBuilder/*.cpp Building/Factories/*.cpp \
@@ -18,7 +20,7 @@ NAME = raytracer
 OBJ = $(SRC:.cpp=.o)
 
 CPPFLAGS = -std=c++20 -Wall -Wextra -Werror -lpthread -pthread -I./Math/ -I./ \
-			-I./Building/ -I./Raytracing -I./Storage -lconfig++
+			-I./Building/ -I./Raytracing -I./Storage -lconfig++ -g
 
 $(NAME): $(SRC)
 	g++ $(CPPFLAGS) $(SRC) -o $(NAME)

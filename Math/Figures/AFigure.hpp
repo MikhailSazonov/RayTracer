@@ -29,7 +29,7 @@ namespace Math
 
         std::optional<IntersectParams> normalWithIntersection(const RayTracer::Ray &);
 
-        inline const Box& getBox() {
+        inline const Box& getBox() const {
             return box_;
         }
 

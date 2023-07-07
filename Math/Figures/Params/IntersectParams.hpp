@@ -9,6 +9,7 @@ namespace Math {
     struct IntersectParams {
         Vector3D normal;
         Point3D intersection;
+        double k;
 
         inline bool operator==(const IntersectParams& other) const {
             return normal == other.normal && intersection == other.intersection;

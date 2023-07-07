@@ -3,10 +3,24 @@
 #include "Scene.hpp"
 
 #include <memory>
+#include <limits>
 
 namespace Storage::Detail {
     enum class CuttingAxis {
         X = 0, Y = 1, Z = 2
+    };
+
+    struct ContainingCube {
+        std::pair<double, double> limits[3]{{-std::numeric_limits<double>::infinity(),
+            std::numeric_limits<double>::infinity()},
+                                            {-std::numeric_limits<double>::infinity(),
+            std::numeric_limits<double>::infinity()},
+                                            {-std::numeric_limits<double>::infinity(),
+            std::numeric_limits<double>::infinity()}};
+
+        std::pair<double, double>& x_limits{limits[0]};
+        std::pair<double, double>& y_limits{limits[1]};
+        std::pair<double, double>& z_limits{limits[2]};
     };
 
     enum class NodeBelonging {
@@ -14,9 +28,10 @@ namespace Storage::Detail {
     };
 
     struct KDFTreeNode {
+        std::shared_ptr<KDFTreeNode> parent_;
         RayTracer::ObjectsPtrs objects_;
-        std::unique_ptr<KDFTreeNode> left_son_;
-        std::unique_ptr<KDFTreeNode> right_son_;
+        std::shared_ptr<KDFTreeNode> left_son_;
+        std::shared_ptr<KDFTreeNode> right_son_;
 
         // The axis on which left and right son are divided.
         CuttingAxis division_axis_;

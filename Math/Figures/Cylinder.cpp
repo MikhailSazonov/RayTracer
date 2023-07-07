@@ -58,6 +58,7 @@ namespace Math {
         min_k = k;
         params.intersection = ray.at(k);
         params.normal = Vector3D(0, 1, 0) * sign;
+        params.k = k;
     }
 
     std::optional<IntersectParams> Cylinder::innerNormalWithIntersection(const RayTracer::Ray& ray) {
@@ -78,6 +79,7 @@ namespace Math {
                 auto at = ray.at(*k_opt);
                 params.intersection = at;
                 params.normal = Vector3D(at.x_, 0, at.z_);
+                params.k = *min_k;
             }
         }
         if (min_k.has_value()) {

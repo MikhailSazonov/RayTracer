@@ -31,7 +31,7 @@ namespace Math {
         auto intersectionPoint = Point3D(ray.source_.x_ + ray.direction_.x_ * root,
                        ray.source_.y_ + ray.direction_.y_ * root,
                        ray.source_.z_ + ray.direction_.z_ * root);
-        return IntersectParams(getNormalVector(intersectionPoint), intersectionPoint);
+        return IntersectParams(getNormalVector(intersectionPoint), intersectionPoint, root);
     }
 
     void Sphere::MakeBox() {

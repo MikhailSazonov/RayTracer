@@ -63,6 +63,7 @@ namespace Math {
         min_k = k;
         params.intersection = ray.at(k);
         params.normal = Vector3D(0, -1, 0);
+        params.k = k;
     }
 
     std::optional<IntersectParams> Cone::innerNormalWithIntersection(const RayTracer::Ray& ray) {
@@ -81,6 +82,7 @@ namespace Math {
                 auto at = ray.at(*k_opt);
                 params.intersection = at;
                 params.normal = Vector3D(at.x_, max_y_normal_ * (- at.y_ / height_), at.z_);
+                params.k = *min_k;
             }
         }
         if (min_k.has_value()) {

@@ -1,6 +1,8 @@
 #pragma once
 
-#include "KDFTreeUtils.hpp"
+#include <KDFTreeUtils.hpp>
+#include <IStorage.hpp>
+#include <Lookup.hpp>
 
 #include <random>
 #include <ctime>
@@ -21,16 +23,18 @@ namespace Storage {
     // Stopping criteria on creating children are:
     // 1. The depth of recursion == MAX_TREE_DEPTH
     // 2. Number of objects in current node <= MIN_OBJECTS_IN_NODE
-    class KDFTree {
+    class KDFTree : public IStorage {
         public:
             KDFTree(const RayTracer::Scene& scene);
+
+            std::optional<RayTracer::RenderingObjectParameters> lookupIntersection(const RayTracer::Ray&) const;
 
         private:
             // BUILDING
 
             void InitHead(const RayTracer::Scene& scene);
 
-            void CreateChildren(std::unique_ptr<Detail::KDFTreeNode>& node, size_t dividing_axis_index = 0, size_t recursion_depth = 0);
+            void CreateChildren(std::shared_ptr<Detail::KDFTreeNode>& node, size_t dividing_axis_index = 0, size_t recursion_depth = 0);
 
             double PickDividingValue(const RayTracer::ObjectsPtrs& obj_refs, Detail::CuttingAxis dividing_axis);
 
@@ -40,11 +44,17 @@ namespace Storage {
 
             Detail::NodeBelonging CompareThePoints(Math::Point3D* points, int index, double dividing_value);
 
-
             // WORKING WITH RAYS
 
+            void traverseDown(const RayTracer::Ray&, const Math::Point3D&, const std::shared_ptr<Detail::KDFTreeNode>**,
+            Detail::ContainingCube&, std::optional<RayTracer::RenderingObjectParameters>&, bool) const;
+
+            void traverseUp(const Math::Point3D&, const std::shared_ptr<Detail::KDFTreeNode>**, Detail::ContainingCube&) const;
+
+            double transitionToNextNode(const RayTracer::Ray&, const Detail::ContainingCube&) const;
+
         private:
-            std::unique_ptr<Detail::KDFTreeNode> head_;
+            std::shared_ptr<Detail::KDFTreeNode> head_;
             const RayTracer::Sources& sources_;
             std::mt19937 gen;
     };

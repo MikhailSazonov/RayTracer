@@ -16,7 +16,7 @@ namespace Math {
 
         double t = - b / a;
 
-        return IntersectParams(Math::cos(normal_, ray.direction_) < 0 ? normal_ : normal_ * (-1.), ray.at(t));
+        return IntersectParams(Math::cos(normal_, ray.direction_) < 0 ? normal_ : normal_ * (-1.), ray.at(t), t);
     }
 
     void Plane::MakeBox() {
