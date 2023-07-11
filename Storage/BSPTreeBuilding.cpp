@@ -1,6 +1,6 @@
-#include "KDFTree.hpp"
+#include "BSPTree.hpp"
 
-Storage::KDFTree::KDFTree(const RayTracer::Scene& scene)
+Storage::BSPTree::BSPTree(const RayTracer::Scene& scene)
     :
         sources_(scene.lights_)
 {
@@ -9,7 +9,7 @@ Storage::KDFTree::KDFTree(const RayTracer::Scene& scene)
     CreateChildren(head_);
 }
 
-void Storage::KDFTree::CreateChildren(std::shared_ptr<Storage::Detail::KDFTreeNode>& node,
+void Storage::BSPTree::CreateChildren(std::shared_ptr<Storage::Detail::BSPTreeNode>& node,
 size_t dividing_axis_index, size_t recursion_depth) {
     using namespace Storage::Detail;
 
@@ -45,28 +45,28 @@ size_t dividing_axis_index, size_t recursion_depth) {
     }
 
     if (!left_set.empty()) {
-        node->left_son_.reset(new KDFTreeNode());
+        node->left_son_.reset(new BSPTreeNode());
         node->left_son_->parent_ = node;
         node->left_son_->objects_ = left_set;
         CreateChildren(node->left_son_, (dividing_axis_index + 1) % order_of_cutting.size(), recursion_depth + 1);
     }
 
     if (!right_set.empty()) {
-        node->right_son_.reset(new KDFTreeNode());
+        node->right_son_.reset(new BSPTreeNode());
         node->right_son_->parent_ = node;
         node->right_son_->objects_ = right_set;
         CreateChildren(node->right_son_, (dividing_axis_index + 1) % order_of_cutting.size(), recursion_depth + 1);
     }
 }
 
-void Storage::KDFTree::InitHead(const RayTracer::Scene& scene) {
-    head_.reset(new Storage::Detail::KDFTreeNode());
+void Storage::BSPTree::InitHead(const RayTracer::Scene& scene) {
+    head_.reset(new Storage::Detail::BSPTreeNode());
     for (auto& obj_unique_ptr : scene.objects_) {
         head_->objects_.insert(&obj_unique_ptr);
     }
 }
 
-double Storage::KDFTree::PickDividingValue(const RayTracer::ObjectsPtrs& obj_refs, Detail::CuttingAxis dividing_axis) {
+double Storage::BSPTree::PickDividingValue(const RayTracer::ObjectsPtrs& obj_refs, Detail::CuttingAxis dividing_axis) {
     size_t idx = gen() % obj_refs.size();
     auto iter = obj_refs.begin();
     for (size_t i = 0; i < idx; ++i) {
@@ -83,7 +83,7 @@ double Storage::KDFTree::PickDividingValue(const RayTracer::ObjectsPtrs& obj_ref
     return 0;
 }
 
-Storage::Detail::NodeBelonging Storage::KDFTree::DetermineBelonging(const Math::AFigure& figure, Detail::CuttingAxis dividing_axis, double dividing_value) {
+Storage::Detail::NodeBelonging Storage::BSPTree::DetermineBelonging(const Math::AFigure& figure, Detail::CuttingAxis dividing_axis, double dividing_value) {
     const auto& box = figure.getBox();
     if ((dividing_axis == Storage::Detail::CuttingAxis::X && box.x_vect_.limit_ == Math::Detail::Length::UNLIMITED) || 
             (dividing_axis == Storage::Detail::CuttingAxis::Y && box.y_vect_.limit_ == Math::Detail::Length::UNLIMITED) || 
@@ -103,7 +103,7 @@ Storage::Detail::NodeBelonging Storage::KDFTree::DetermineBelonging(const Math::
     return CompareThePoints(p, static_cast<int>(dividing_axis), dividing_value);
 }
 
-Storage::Detail::NodeBelonging Storage::KDFTree::CompareThePoints(Math::Point3D* points, int index, double dividing_value) {
+Storage::Detail::NodeBelonging Storage::BSPTree::CompareThePoints(Math::Point3D* points, int index, double dividing_value) {
     bool left = true;
     bool right = true;
     for (int i = 0; i < 8; ++i) {

@@ -1,4 +1,4 @@
-#include "KDFTree.hpp"
+#include "BSPTree.hpp"
 
 static bool placed_between(double lo, double v, double hi) {
     return lo <= v && v <= hi;
@@ -14,10 +14,10 @@ static void solve(double start, double add, double eq, double& v) {
     }
 }
 
-std::optional<RayTracer::RenderingObjectParameters> Storage::KDFTree::lookupIntersection(const RayTracer::Ray& ray) const {
+std::optional<RayTracer::RenderingObjectParameters> Storage::BSPTree::lookupIntersection(const RayTracer::Ray& ray) const {
     Storage::Detail::ContainingCube ray_cube;
     std::optional<RayTracer::RenderingObjectParameters> collide_params = std::nullopt;
-    const std::shared_ptr<Storage::Detail::KDFTreeNode>* node_ptr_ptr = &head_; 
+    const std::shared_ptr<Storage::Detail::BSPTreeNode>* node_ptr_ptr = &head_; 
     double t = 0;
     while (t >= 0) {
         Math::Point3D current_observation = ray.at(t);
@@ -31,8 +31,8 @@ std::optional<RayTracer::RenderingObjectParameters> Storage::KDFTree::lookupInte
     return collide_params;
 }
 
-void Storage::KDFTree::traverseDown(const RayTracer::Ray& ray, const Math::Point3D& current_obs,
-const std::shared_ptr<Storage::Detail::KDFTreeNode>** current_node,
+void Storage::BSPTree::traverseDown(const RayTracer::Ray& ray, const Math::Point3D& current_obs,
+const std::shared_ptr<Storage::Detail::BSPTreeNode>** current_node,
 Detail::ContainingCube& cube, std::optional<RayTracer::RenderingObjectParameters>& colliding_params, bool skip) const {
     // Optimization: if we are traversing for second or more iteration, we simply skip first traverse
     if (!skip) {
@@ -55,7 +55,7 @@ Detail::ContainingCube& cube, std::optional<RayTracer::RenderingObjectParameters
     }
 }
 
-void Storage::KDFTree::traverseUp(const Math::Point3D& current_obs, const std::shared_ptr<Detail::KDFTreeNode>** current_node,
+void Storage::BSPTree::traverseUp(const Math::Point3D& current_obs, const std::shared_ptr<Detail::BSPTreeNode>** current_node,
 Detail::ContainingCube& cube) const {
     if (placed_between(cube.x_limits.first, current_obs.x_, cube.x_limits.second) &&
         placed_between(cube.y_limits.first, current_obs.y_, cube.y_limits.second) &&
@@ -72,7 +72,7 @@ Detail::ContainingCube& cube) const {
     traverseUp(current_obs, current_node, cube);
 }
 
-double Storage::KDFTree::transitionToNextNode(const RayTracer::Ray& ray, const Storage::Detail::ContainingCube& cube) const {
+double Storage::BSPTree::transitionToNextNode(const RayTracer::Ray& ray, const Storage::Detail::ContainingCube& cube) const {
     double next = -1;
     solve(ray.source_.x_, ray.direction_.x_, cube.x_limits.first, next);
     solve(ray.source_.x_, ray.direction_.x_, cube.x_limits.second, next);

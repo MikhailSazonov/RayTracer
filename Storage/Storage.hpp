@@ -1,8 +1,8 @@
 #pragma once
 
 #include <SimpleStorage.hpp>
-#include <KDFTree.hpp>
+#include <BSPTree.hpp>
 
 namespace Storage {
-    using Storage = KDFTree;
+    using Storage = BSPTree;
 }

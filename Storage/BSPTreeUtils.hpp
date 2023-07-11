@@ -27,11 +27,11 @@ namespace Storage::Detail {
         LEFT = -1, BOTH = 0, RIGHT = 1
     };
 
-    struct KDFTreeNode {
-        std::shared_ptr<KDFTreeNode> parent_;
+    struct BSPTreeNode {
+        std::shared_ptr<BSPTreeNode> parent_;
         RayTracer::ObjectsPtrs objects_;
-        std::shared_ptr<KDFTreeNode> left_son_;
-        std::shared_ptr<KDFTreeNode> right_son_;
+        std::shared_ptr<BSPTreeNode> left_son_;
+        std::shared_ptr<BSPTreeNode> right_son_;
 
         // The axis on which left and right son are divided.
         CuttingAxis division_axis_;
